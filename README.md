@@ -1,4 +1,7 @@
 # Bullpen
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9d34d59d14564fdea6518d47555ec60b)](https://app.codacy.com/app/pokk/Bullpen?utm_source=github.com&utm_medium=referral&utm_content=SmashKs/Bullpen&utm_campaign=badger)
+
 Training the data to become a tensorflow model.
 
 # License
