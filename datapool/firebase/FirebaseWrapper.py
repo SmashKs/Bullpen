@@ -1,11 +1,9 @@
-import datetime
 import json
 from pprint import pprint as pp
 
 import pyrebase
 from pyrebase.pyrebase import Auth, Database, Firebase, Storage
 
-from datapool.data.ImageDataObj import ImageDetailObj2
 from datapool.firebase import FIREBASE_CONFIGURATION
 
 IMAGE_VERSION_1 = 'ImageVersion1'
@@ -32,7 +30,12 @@ class FirebaseWrapper(object):
 
     def _obtain_each_objects(self):
         if self.__user_config:
-            self.__firebase = pyrebase.initialize_app(self.__user_config)
+            try:
+                self.__firebase = pyrebase.initialize_app(self.__user_config)
+            except FileNotFoundError as err:
+                pp(err)
+                self.__user_config = None
+
             # Get the firebase then assign each subjects.
             if self.__firebase:
                 self.__firebase_auth = self.__firebase.auth()
@@ -67,19 +70,24 @@ class FirebaseWrapper(object):
 
         self.__firebase_database.child(image_version).child(author).update(image_data)
 
-    def read_image_properties(self):
-        pass
+    def read_image_properties(self, author=None, image_version=IMAGE_VERSION_2):
+        root_node = self.__firebase_database.child(image_version)
+
+        if author is not None:
+            root_node = root_node.child(author)
+
+        return root_node.get()
 
 
 if __name__ == '__main__':
     f = FirebaseWrapper().create()
-    image = ImageDetailObj2(author='author',
-                            title='test title',
-                            url_list={111: 'https://www.google.com.tw',
-                                      222: 'https://tw.yahoo.com.tw'},
-                            tag_list={'google': 'https://www.google.com.tw',
-                                      'yahoo': 'https://tw.yahoo.com'},
-                            likes=12,
-                            comments=100,
-                            date=datetime.datetime.now())
-    print(image)
+    pp(f.read_image_properties('yua_mikami').val())
+    # image = ImageDetailObj2(author='author',
+    #                         title='test title',
+    #                         url_list={111: 'https://www.google.com.tw',
+    #                                   222: 'https://tw.yahoo.com.tw'},
+    #                         tag_list={'google': 'https://www.google.com.tw',
+    #                                   'yahoo': 'https://tw.yahoo.com'},
+    #                         likes=12,
+    #                         comments=100,
+    #                         date=datetime.datetime.now())
