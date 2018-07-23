@@ -78,10 +78,17 @@ class FirebaseWrapper(object):
 
         return root_node.get()
 
+    def _fetch_all_user_name(self, image_version=IMAGE_VERSION_2):  # type: (FirebaseWrapper, str) -> list
+        name_list = []
+
+        for name in self.__firebase_database.child(image_version).get().each():
+            name_list.append(name.key())
+
+        return name_list
+
 
 if __name__ == '__main__':
     f = FirebaseWrapper().create()
-    pp(f.read_image_properties('yua_mikami').val())
     # image = ImageDetailObj2(author='author',
     #                         title='test title',
     #                         url_list={111: 'https://www.google.com.tw',
@@ -91,3 +98,6 @@ if __name__ == '__main__':
     #                         likes=12,
     #                         comments=100,
     #                         date=datetime.datetime.now())
+    names = f._fetch_all_user_name()
+    for name in names:
+        pp(f.read_image_properties(name).val())
