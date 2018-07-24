@@ -99,5 +99,5 @@ if __name__ == '__main__':
     #                         comments=100,
     #                         date=datetime.datetime.now())
     names = f._fetch_all_user_name()
-    for name in names:
-        pp(f.read_image_properties(name).val())
+    for n in names:
+        pp(f.read_image_properties(n).val())
