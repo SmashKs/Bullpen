@@ -4,6 +4,14 @@
 
 Training the data to become a tensorflow model.
 
+# Start TensorBoard
+
+It's able to run the tensorboard server on your local.
+
+```bash
+tensorboard --logdir=*your folder direction* --host=127.0.0.1
+```
+
 # License
 
 ```
