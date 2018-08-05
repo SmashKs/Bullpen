@@ -57,16 +57,13 @@ class FirebaseWrapper(object):
                 self.__firebase_database = self.__firebase.database()
                 self.__firebase_storage = self.__firebase.storage()
 
-    def _fetch_all_user_name(self, image_version=IMAGE_VERSION_2):  # type: (FirebaseWrapper, str) -> list
+    def fetch_all_user_name(self, image_version=IMAGE_VERSION_2):  # type: (FirebaseWrapper, str) -> list
         name_list = []
 
         for name in self.__firebase_database.child(image_version).get().each():
             name_list.append(name.key())
 
         return name_list
-
-    def __modified_variable(self, firebase_v2_data):
-        pass
 
     def create(self):
         """
@@ -116,14 +113,6 @@ if __name__ == '__main__':
     #                         likes=12,
     #                         comments=100,
     #                         date=datetime.datetime.now())
-    names = f._fetch_all_user_name()
-    # for n in names:
-    #     pp(f.read_image_properties(n).val())
-    for val in f.read_image_properties(names[0]).val().values():  # type: dict
-        # Change the key.
-        val['date'] = val.pop('post date')
-        if val.get('tag'):
-            val['tag_list'] = val.pop('tag')
-        if val.get('uri'):
-            val['url_list'] = val.pop('uri')
-        print(FirebaseWrapper.convert_dict_to_obj('ImageDataObj', val))
+    names = f.fetch_all_user_name()
+    for name in names:
+        pp(f.read_image_properties(name).val())
